@@ -1,0 +1,21 @@
+name: depoly EcommApp
+on:
+  push:
+    branches: [ "master" ]
+jobs:
+  build:
+    runs-on: ubuntu lastest
+    steps:
+    - uses: action/checkout@v4
+      name: Setup jdk 17
+    - uses: action/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with maven
+      run: mvn -B package --file pom.xml
+   
+  
+
+   
