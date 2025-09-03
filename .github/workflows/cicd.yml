@@ -30,6 +30,6 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: depoly ecomm to tomcatserver-running inside Ec2
-      run: curl -v -u admin:admin -T /home/runner/work/etoe/etoe/target/Ecomm.war 'http://65.2.30.92:8080/manager/text/depoly?path=/Ecomm.war'
+      run: curl -v -u admin:admin -T /home/runner/work/etoe/etoe/target/Ecomm.war 'http://http://13.233.244.61:8080//manager/text/depoly?path=/Ecomm.war'
 
    
