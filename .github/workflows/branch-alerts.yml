@@ -1,45 +1,36 @@
-name: Branch Push Alert
-
-on:
-  push:
-    branches:
-      - '**'   # Trigger on all branches
-
 jobs:
   check-branch:
     runs-on: ubuntu-latest
+    outputs:
+      wrong_branch: ${{ steps.check.outputs.wrong_branch }}
     steps:
-      - name: Check if push is on restricted branch
+      - id: check
         run: |
           branch="${{ github.ref_name }}"
           echo "Pushed branch: $branch"
 
-         
           if [[ "$branch" == "main" || "$branch" == "master" ]]; then
-            echo "Wrong branch detected!"
-            exit 1
+            echo "wrong_branch=true" >> $GITHUB_OUTPUT
+            echo "❌ Wrong branch detected!"
           else
-            echo "Safe branch ✅"
+            echo "wrong_branch=false" >> $GITHUB_OUTPUT
+            echo "✅ Safe branch"
           fi
 
   send-email-alert:
-    if: failure()   # Runs only if check-branch fails
+    needs: check-branch
+    if: needs.check-branch.outputs.wrong_branch == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Send alert email
         uses: dawidd6/action-send-mail@v3
         with:
-          
           server_address: smtp.gmail.com
           server_port: 465
-
-          
-          username: ${{ secrets.ALERT_EMAIL_USER }}  
-          password: ${{ secrets.ALERT_EMAIL_PASS }}  
-
-         
+          username: ${{ secrets.ALERT_EMAIL_USER }}
+          password: ${{ secrets.ALERT_EMAIL_PASS }}
           from: ${{ secrets.ALERT_EMAIL_USER }}
-          to: ckambagiriramudu2@gmail.com
+          to: team@example.com
           subject: "🚨 Wrong Branch Push Detected: ${{ github.ref_name }}"
           body: |
             ❌ A push was made to a restricted branch: **${{ github.ref_name }}**
@@ -48,5 +39,3 @@ jobs:
             👤 Pusher:     ${{ github.actor }}
             🔗 Commit:     ${{ github.sha }}
             📝 Message:    ${{ github.event.head_commit.message }}
-
-            👉 View run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
