@@ -1,7 +1,7 @@
 name: Launch EC2 Instance
 
 on:
-  workflow_dispatch:  # manual trigger
+  workflow_dispatch:
 
 jobs:
   launch-ec2:
@@ -16,7 +16,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1 
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Launch EC2 instance
         run: |
@@ -29,5 +29,8 @@ jobs:
             --query 'Instances[0].InstanceId' \
             --output text)
 
-          echo "Launched EC2 Instance with ID: $INSTANCE_ID"
+          echo "✅ Launched EC2 Instance with ID: $INSTANCE_ID"
+
+
+          
 
