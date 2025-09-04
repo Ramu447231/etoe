@@ -1,3 +1,10 @@
+name: Branch Push Alert
+
+on:
+  push:
+    branches:
+      - '**'   
+
 jobs:
   check-branch:
     runs-on: ubuntu-latest
@@ -9,6 +16,7 @@ jobs:
           branch="${{ github.ref_name }}"
           echo "Pushed branch: $branch"
 
+          # ❌ Add restricted branches here
           if [[ "$branch" == "main" || "$branch" == "master" ]]; then
             echo "wrong_branch=true" >> $GITHUB_OUTPUT
             echo "❌ Wrong branch detected!"
@@ -30,7 +38,7 @@ jobs:
           username: ${{ secrets.ALERT_EMAIL_USER }}
           password: ${{ secrets.ALERT_EMAIL_PASS }}
           from: ${{ secrets.ALERT_EMAIL_USER }}
-          to: team@example.com
+          to: ckambagiriramudu2@gmail.com
           subject: "🚨 Wrong Branch Push Detected: ${{ github.ref_name }}"
           body: |
             ❌ A push was made to a restricted branch: **${{ github.ref_name }}**
@@ -39,3 +47,5 @@ jobs:
             👤 Pusher:     ${{ github.actor }}
             🔗 Commit:     ${{ github.sha }}
             📝 Message:    ${{ github.event.head_commit.message }}
+
+            👉 View run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
