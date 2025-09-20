@@ -40,7 +40,17 @@
 					<username>admin</username>
 					<password>admin</password>
 					<path>/Ecomm</path> 
-				</configuration> 
+					<url>http://13.203.214.72:8081/manager/text</url>
+					<server>apache-tomcat</server> 
+					<username>admin</username>
+					<password>admin</password>
+					<path>/Ecomm</path> 	
+					<url>http://13.203.214.72:8082/manager/text</url>
+					<server>apache-tomcat</server> 
+					<username>admin</username>
+					<password>admin</password>
+					<path>/Ecomm</path> 
+					</configuration> 
 			</plugin>
 		</plugins>
 	</build>
